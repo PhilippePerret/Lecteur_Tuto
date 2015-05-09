@@ -39,10 +39,18 @@ class Fenetre
   end
   
   def next_text
-    "Le texte suivant"
+    file.next_paragraph
   end
   def prev_text
-    "Le texte précédent"
+    file.prev_paragraph
+  end
+  
+  ##
+  #
+  # L'instance TutoText du fichier contenant le texte
+  #
+  def file
+    @file ||= TutoText::new( data[:file] )
   end
   
   ##
