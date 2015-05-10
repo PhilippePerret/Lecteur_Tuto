@@ -55,10 +55,14 @@ class TutoText
     paragraph
   end
   
+  ##
+  #
+  # Return le paragraphe courant
+  #
   def paragraph
     # puts "Paragraphe d'indice #{@icur_paragraph}"
     fenetre.progressbar['value'] = @icur_paragraph + 1
-    paragraphs[@icur_paragraph]
+    paragraphs[ @icur_paragraph ]
   end
   
   ##

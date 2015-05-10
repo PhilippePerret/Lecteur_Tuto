@@ -1,5 +1,5 @@
 La première phrase du tutoriel.
 
-La seconde phrase du tutoriel.
+La seconde phrase du tutoriel. Une phrase assez longue pour voir si ça apparaitra bien sur plusieurs lignes.
 
 La troisième phrase du tutoriel.

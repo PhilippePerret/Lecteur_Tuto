@@ -7,11 +7,18 @@ Gestion de la fenêtre
 =end
 class Fenetre
   
-  FEN_WIDTH   = 840
+  FEN_WIDTH   = 1200
   FEN_HEIGHT  = 200
+  FEN_TOP     = 400
+  FEN_LEFT    = 100
   
   attr_reader :data
   attr_reader :root
+  
+  ##
+  ## Contenu de la fenêtre (frame)
+  ##
+  attr_reader :content
   
   ##
   ## Label Tk contenant le texte
@@ -102,14 +109,18 @@ class Fenetre
     
     data[:width]  ||= FEN_WIDTH
     data[:height] ||= FEN_HEIGHT
-    data[:top]    ||= 100
-    data[:left]   ||= 0
+    data[:top]    ||= FEN_TOP
+    data[:left]   ||= FEN_LEFT
     # @root['geometry'] = '300x200-5+40'
     @root['geometry'] = "#{data[:width]}x#{data[:height]}-#{data[:left]}+#{data[:top]}"
+    
+    @content = Tk::Tile::Frame::new( @root )
     
     create_label
     create_progressbar
     bind_fenetre
+
+    content.grid :column => 0, :row => 0 
 
   end
   
@@ -124,12 +135,27 @@ class Fenetre
   # On crée le label
   #
   def create_label
-    @main_label = Tk::Tile::Label.new(root) do
+    @main_label = Tk::Tile::Label.new(content) do
+    # @main_label = Tk::Tile::Label.new(root) do
       text      "Clique la touche espace ou -> pour commencer."
       padding   '10 10'
-      width     '200'
-    end.grid
+    end.grid(column: 0, row: 0)
     
+    ##
+    ## Définir la font du texte
+    ##
+    appHighlightFont = TkFont.new :family => 'Helvetica', :size => 32, :weight => 'normal'
+    @main_label['font'] = appHighlightFont
+    
+    @main_label['width']      = data[:width]
+    ##
+    ## Pour "enrouler" un texte trop grand
+    ##
+    @main_label['wraplength'] = data[:width]
+    
+    ##
+    ## Bordure
+    ##
     @main_label['borderwidth'] = 2
     @main_label['relief'] = 'sunken'
   end
@@ -140,11 +166,13 @@ class Fenetre
   # déjà été lue et quelle quantité reste à lire
   #
   def create_progressbar
-    @progressbar = Tk::Tile::Progressbar.new(root) do
+    @progressbar = Tk::Tile::Progressbar.new(content) do
+    # @progressbar = Tk::Tile::Progressbar.new(root) do
       orient 'horizontal'
-      length FEN_WIDTH
+      # length FEN_WIDTH
       mode 'determinate'
-    end.grid
+    end.grid(column: 0, row: 2 )
+    @progressbar['length'] = FEN_WIDTH
   end
   
   ##
