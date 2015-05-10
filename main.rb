@@ -15,10 +15,22 @@ Le fichier contenant le texte doit être défini :
 
 require './ruby/required'
 
+##
+## Initialise les menus
+##
+Menubar::init
 
+##
+## Crée la fenêtre où va apparaitre le texte
+##
 fen = Fenetre::new( 
   titre:  "Lecture du tutoriel",
   file:   nil # le fichier contenant le texte
   )
 
+
+##
+## Ouvre la fenêtre
+##  
 fen.open
+

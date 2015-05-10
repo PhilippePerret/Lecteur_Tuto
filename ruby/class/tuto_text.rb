@@ -8,12 +8,38 @@ Le fichier texte du tutoriel
 class TutoText
   
   ##
+  ## L'instance {Fenetre} à laquelle est attaché le fichier
+  ##
+  attr_reader :fenetre
+  
+  ##
   ## L'indice du paragraphe courant
   ##
   attr_reader :icur_paragraph
   
-  def initialize path = nil
-    @path = path
+  ##
+  ## Path du fichier (pour le définir de l'extérieur, avec le menu "Ouvrir"
+  ## par exemple)
+  ##
+  attr_writer :path
+  
+  def initialize fenetre, path = nil
+    @fenetre  = fenetre
+    @path     = path
+  end
+  
+  ##
+  #
+  # Ré-initialise le texte. Lorsqu'un nouveau fichier est choisi
+  # par exemple
+  #
+  def reset
+    @icur_paragraph   = nil
+    @paragraphs       = nil
+    fenetre.progressbar['value'] = 0
+    @paragraphs_count = nil
+    get_paragraphs
+    fenetre.main_label['text'] = "=== Presser la barre espace ou la flèche droite pour commencer ==="
   end
   
   def next_paragraph
@@ -30,6 +56,8 @@ class TutoText
   end
   
   def paragraph
+    # puts "Paragraphe d'indice #{@icur_paragraph}"
+    fenetre.progressbar['value'] = @icur_paragraph + 1
     paragraphs[@icur_paragraph]
   end
   
@@ -38,10 +66,14 @@ class TutoText
   # Retourne la liste des paragraphes (seulement ceux contenant du texte)
   #
   def paragraphs
-    @paragraphs ||= begin
-      t = File.read(path).force_encoding('utf-8')
-      t.split("\n").reject{ |p| p.strip == "" || p.strip.start_with?('#')}
-    end
+    get_paragraphs if @paragraphs.nil?
+    @paragraphs
+  end
+  
+  def get_paragraphs
+    t = File.read(path).force_encoding('utf-8')
+    @paragraphs = t.split("\n").reject{ |p| p.strip == "" || p.strip.start_with?('#')}
+    fenetre.set_progressbar
   end
   
   ##
